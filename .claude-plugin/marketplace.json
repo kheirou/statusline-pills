@@ -1,0 +1,5 @@
+{
+  "name": "statusline-pills",
+  "owner": { "name": "kheirou" },
+  "plugins": [{ "name": "statusline-pills", "source": "./" }]
+}
