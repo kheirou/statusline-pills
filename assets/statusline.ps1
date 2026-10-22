@@ -65,13 +65,15 @@ try {
     $nextXp = 10 * [math]::Pow($lvl + 1, 2)
     $now = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
     $mood = [math]::Min($p.mood, [math]::Max(30, $p.mood - [math]::Floor(($now - $p.at) / 600000)))
-    $face = if ($mood -ge 70) { '(=^･ω･^=)' } elseif ($mood -ge 35) { '(=^-ω-^=)' } else { '(=;ω;=)' }
+    $moodEmoji = if ($mood -ge 70) { '😸' } elseif ($mood -ge 35) { '😺' } else { '😿' }
     $mc = if ($mood -ge 70) { 32 } elseif ($mood -ge 35) { 33 } else { 31 }
     $stage = if ($lvl -ge 10) { 'legend' } elseif ($lvl -ge 6) { 'adult' } elseif ($lvl -ge 3) { 'kid' } elseif ($lvl -ge 1) { 'baby' } else { 'egg' }
+    $stageEmoji = switch ($stage) { 'egg' {'🥚'} 'baby' {'🐱'} 'kid' {'🐈'} 'adult' {'🐆'} default {'🦁'} }
+    $face = "$stageEmoji$moodEmoji"
     $age = [TimeSpan]::FromMilliseconds($now - $p.born)
     $ageTxt = if ($age.TotalDays -ge 1) { "$([int]$age.TotalDays)d" } else { "$([int]$age.TotalHours)h" }
     $moodFg = Fg @{32=108;33=179;31=167}[$mc]
-    $parts += ,@("54;36;56", "$(Fg 218)$face Lv$lvl $stage$W $D$(Bar ($p.xp - 10 * $lvl * $lvl) ($nextXp - 10 * $lvl * $lvl))$ND ${D}•${ND} 💗 $mood${D} •${ND} 📝 $($p.edits) ${D}•${ND} 🔀 $($p.commits) ${D}•${ND} 🧪 $($p.tests) ${D}•${ND} ❌ $($p.fails) ${D}•${ND} ⏳ $ageTxt")
+    $parts += ,@("54;36;56", "$(Fg 218)$face ⭐ $lvl $stage$W $D$(Bar ($p.xp - 10 * $lvl * $lvl) ($nextXp - 10 * $lvl * $lvl))$ND ${D}•${ND} 💗 $mood${D} •${ND} 📝 $($p.edits) ${D}•${ND} 🔀 $($p.commits) ${D}•${ND} 🧪 $($p.tests) ${D}•${ND} ❌ $($p.fails) ${D}•${ND} 🎂 $ageTxt")
 } catch {}
 
 $out = ''
